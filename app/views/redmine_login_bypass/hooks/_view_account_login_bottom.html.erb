@@ -1,0 +1,28 @@
+<div id="username-selector-container" style="display: none">
+  <%=
+    users =
+      User.where(type: 'User')
+          .order(:id)
+          .map { |u| ["#{u.login} #{u.admin? ? '(admin)' : ''}", u.login] }
+    select_tag(
+      'username',
+      options_for_select(users),
+      style: 'width: 100%'
+    )
+  %>
+</div>
+
+<script>
+  $(function() {
+    var loginForm = $('#login-form');
+    loginForm.find('label[for=password]').hide();
+
+    // Set dummy password because login fails if password is empty.
+    // (See User.try_to_login)
+    loginForm.find('input[name=password]').hide().val('dummy');
+
+    var selectorContainer = $('#username-selector-container');
+    loginForm.find('input[name=username]').replaceWith(selectorContainer.children()[0]);
+    selectorContainer.remove();
+  });
+</script>
