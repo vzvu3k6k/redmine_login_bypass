@@ -4,7 +4,7 @@ module RedmineLoginBypass
       true
     end
 
-    def check_password_change(*)
+    def must_change_password?(*)
       # Do nothing
     end
   end
