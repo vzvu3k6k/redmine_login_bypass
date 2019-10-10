@@ -19,7 +19,7 @@
 
     // Set dummy password because login fails if password is empty.
     // (See User.try_to_login)
-    loginForm.find('input[name=password]').hide().val('dummy');
+    loginForm.find('input[name=password]').attr('type', 'hidden').val('dummy');
 
     var selectorContainer = $('#username-selector-container');
     loginForm.find('input[name=username]').replaceWith(selectorContainer.children()[0]);
