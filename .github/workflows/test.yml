@@ -13,11 +13,16 @@ jobs:
       matrix:
         redmine: ['4.0.4']
 
+    env:
+      REDMINE: ${{ matrix.redmine }}
+      RAILS_ENV: test
+
     steps:
     - uses: actions/checkout@v1
       with:
         fetch-depth: 1
-    - run: |
+    - name: Prepare Redmine
+      run: |
         curl -L https://github.com/redmine/redmine/archive/${REDMINE}.tar.gz | tar xz -C /tmp
         cd /tmp/redmine-${REDMINE}
 
@@ -32,10 +37,7 @@ jobs:
           gem 'sprockets', '~> 3.7.2'
         RUBY
 
-        bundle install
         ln -s $GITHUB_WORKSPACE ./plugins
-
-        bin/rake db:create db:migrate redmine:plugins:test:integration
-      env:
-        REDMINE: ${{ matrix.redmine }}
-        RAILS_ENV: test
+    - run: bundle install
+    - run: bin/rake db:create db:migrate
+    - run: redmine:plugins:test:integration
