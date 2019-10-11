@@ -24,7 +24,8 @@ jobs:
     - name: Prepare Redmine
       run: |
         curl -L https://github.com/redmine/redmine/archive/${REDMINE}.tar.gz | tar xz -C /tmp
-        cd /tmp/redmine-${REDMINE}
+        mv /tmp/redmine-${REDMINE} /tmp/redmine
+        cd /tmp/redmine
 
         cat <<YAML > ./config/database.yml
         test:
@@ -39,5 +40,8 @@ jobs:
 
         ln -s $GITHUB_WORKSPACE ./plugins
     - run: bundle install
+      working-directory: /tmp/redmine
     - run: bin/rake db:create db:migrate
-    - run: redmine:plugins:test:integration
+      working-directory: /tmp/redmine
+    - run: bin/rake redmine:plugins:test:integration
+      working-directory: /tmp/redmine

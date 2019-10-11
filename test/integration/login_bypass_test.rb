@@ -5,6 +5,9 @@ require File.expand_path('../../../../../test/test_helper', __FILE__)
 class LoginByPassTest < ActionDispatch::SystemTestCase
   fixtures :users
 
+  # To avoid `unknown error: DevToolsActivePort file doesn't exist` on GitHub Actions
+  driven_by :selenium, using: :headless_chrome
+
   def test_login_page_form
     visit signin_path
 
