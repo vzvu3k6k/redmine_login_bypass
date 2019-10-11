@@ -3,7 +3,7 @@
     users =
       User.where(type: 'User')
           .order(:id)
-          .map { |u| ["#{u.login} #{u.admin? ? '(admin)' : ''}", u.login] }
+          .map { |u| ["#{u.login}#{u.admin? ? ' (admin)' : ''}", u.login] }
     select_tag(
       'username',
       options_for_select(users),
