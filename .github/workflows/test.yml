@@ -1,0 +1,45 @@
+name: test
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        redmine: ['4.0.4']
+
+    steps:
+    - uses: actions/checkout@v1
+      with:
+        fetch-depth: 1
+    - uses: actions/setup-ruby@v1
+      with:
+        ruby-version: '2.6'
+    - run: |
+        curl -L https://github.com/redmine/redmine/archive/${REDMINE}.tar.gz | tar xz -C /tmp
+        cd /tmp/redmine-${REDMINE}
+
+        cat <<YAML > ./config/database.yml
+        test:
+          adapter: sqlite3
+          database: /tmp/redmine_test.sqlite3
+        YAML
+
+        # Required by sqlite3 gem
+        sudo apt-get install libsqlite3-dev
+
+        # http://www.redmine.org/issues/32223
+        cat <<RUBY > Gemfile.local
+          gem 'sprockets', '~> 3.7.2'
+        RUBY
+
+        bundle install
+        ln -s $GITHUB_WORKSPACE ./plugins
+
+        bin/rake db:create db:migrate redmine:plugins:test:integration
+      env:
+        REDMINE: ${{ matrix.redmine }}
+        RAILS_ENV: test
