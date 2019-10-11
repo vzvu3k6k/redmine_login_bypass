@@ -6,6 +6,8 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
+    container:
+      image: circleci/ruby:2.6-browsers
 
     strategy:
       matrix:
@@ -15,9 +17,6 @@ jobs:
     - uses: actions/checkout@v1
       with:
         fetch-depth: 1
-    - uses: actions/setup-ruby@v1
-      with:
-        ruby-version: '2.6'
     - run: |
         curl -L https://github.com/redmine/redmine/archive/${REDMINE}.tar.gz | tar xz -C /tmp
         cd /tmp/redmine-${REDMINE}
@@ -27,9 +26,6 @@ jobs:
           adapter: sqlite3
           database: /tmp/redmine_test.sqlite3
         YAML
-
-        # Required by sqlite3 gem
-        sudo apt-get install libsqlite3-dev
 
         # http://www.redmine.org/issues/32223
         cat <<RUBY > Gemfile.local
