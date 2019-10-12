@@ -15,10 +15,7 @@ class LoginBypassTest < RedmineLoginBypass::SystemTestCase
     # Redmine 3 uses phantomjs via remote driver but phantomjs is deprecated.
     # Use chromedriver instead.
     def before_setup
-      # :selenium_chrome_headless causes
-      # `NameError: uninitialized constant Selenium::WebDriver::Chrome::Options`
-      # probably because of version mismatch between Capybara and Selenium.
-      Capybara.current_driver = :selenium_chrome
+      Capybara.current_driver = :redmine_login_bypass_selenium_chrome_headless
       super
     end
   end
