@@ -11,7 +11,7 @@ jobs:
 
     strategy:
       matrix:
-        redmine: ['4.0.4']
+        redmine: ['4.0.4', '3.4.11']
 
     env:
       REDMINE: ${{ matrix.redmine }}
@@ -43,5 +43,5 @@ jobs:
       working-directory: /tmp/redmine
     - run: bin/rake db:create db:migrate
       working-directory: /tmp/redmine
-    - run: bin/rake redmine:plugins:test:integration
+    - run: bin/rake redmine:plugins:test:ui
       working-directory: /tmp/redmine

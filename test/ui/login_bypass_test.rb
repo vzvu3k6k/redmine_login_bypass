@@ -1,12 +1,8 @@
 require File.expand_path('../../../../../test/test_helper', __FILE__)
+require File.expand_path('../system_test_case', __FILE__)
 
-# This file is a system test but placed in test/integration directory
-# because Redmine doesn't have a Rake task to run plugin's system tests.
-class LoginByPassTest < ActionDispatch::SystemTestCase
+class LoginBypassTest < RedmineLoginBypass::SystemTestCase
   fixtures :users
-
-  # To avoid `unknown error: DevToolsActivePort file doesn't exist` on GitHub Actions
-  driven_by :selenium, using: :headless_chrome
 
   def test_login_page_form
     visit signin_path
