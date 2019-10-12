@@ -7,6 +7,14 @@ end
 
 require 'redmine_login_bypass/hook'
 
-ActiveSupport::Reloader.to_prepare do
+# ActionDispatch::Reloader is deprecated in Rails 5 (Redmine 4).
+reloader =
+  if defined? ActiveSupport::Reloader
+    ActiveSupport::Reloader
+  else
+    ActionDispatch::Reloader
+  end
+
+reloader.to_prepare do
   User.prepend RedmineLoginBypass::UserPatch
 end
