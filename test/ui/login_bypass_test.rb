@@ -4,22 +4,6 @@ require File.expand_path('../system_test_case', __FILE__)
 class LoginBypassTest < RedmineLoginBypass::SystemTestCase
   fixtures :users
 
-  if respond_to? :driven_by
-    # For Redmine 4
-
-    # To avoid `unknown error: DevToolsActivePort file doesn't exist` on GitHub Actions
-    driven_by :selenium, using: :headless_chrome
-  else
-    # For Redmine 3
-
-    # Redmine 3 uses phantomjs via remote driver but phantomjs is deprecated.
-    # Use chromedriver instead.
-    def before_setup
-      Capybara.current_driver = :redmine_login_bypass_selenium_chrome_headless
-      super
-    end
-  end
-
   def test_login_page_form
     visit signin_path
 
