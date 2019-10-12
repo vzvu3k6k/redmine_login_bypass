@@ -1,12 +1,27 @@
 require File.expand_path('../../../../../test/test_helper', __FILE__)
+require File.expand_path('../system_test_case', __FILE__)
 
-# This file is a system test but placed in test/integration directory
-# because Redmine doesn't have a Rake task to run plugin's system tests.
-class LoginByPassTest < ActionDispatch::SystemTestCase
+class LoginBypassTest < RedmineLoginBypass::SystemTestCase
   fixtures :users
 
-  # To avoid `unknown error: DevToolsActivePort file doesn't exist` on GitHub Actions
-  driven_by :selenium, using: :headless_chrome
+  if respond_to? :driven_by
+    # For Redmine 4
+
+    # To avoid `unknown error: DevToolsActivePort file doesn't exist` on GitHub Actions
+    driven_by :selenium, using: :headless_chrome
+  else
+    # For Redmine 3
+
+    # Redmine 3 uses phantomjs via remote driver but phantomjs is deprecated.
+    # Use chromedriver instead.
+    def before_setup
+      # :selenium_chrome_headless causes
+      # `NameError: uninitialized constant Selenium::WebDriver::Chrome::Options`
+      # probably because of version mismatch between Capybara and Selenium.
+      Capybara.current_driver = :selenium_chrome
+      super
+    end
+  end
 
   def test_login_page_form
     visit signin_path

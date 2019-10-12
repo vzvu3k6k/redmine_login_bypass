@@ -43,5 +43,5 @@ jobs:
       working-directory: /tmp/redmine
     - run: bin/rake db:create db:migrate
       working-directory: /tmp/redmine
-    - run: bin/rake redmine:plugins:test:integration
+    - run: bin/rake redmine:plugins:test:ui
       working-directory: /tmp/redmine
