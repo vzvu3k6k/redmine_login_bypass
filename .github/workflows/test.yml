@@ -11,7 +11,7 @@ jobs:
 
     strategy:
       matrix:
-        redmine: ['4.0.4']
+        redmine: ['4.0.4', '3.4.11']
 
     env:
       REDMINE: ${{ matrix.redmine }}
