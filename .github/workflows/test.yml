@@ -16,6 +16,7 @@ jobs:
     env:
       REDMINE: ${{ matrix.redmine }}
       RAILS_ENV: test
+      ENABLE_REDMINE_LOGIN_BYPASS: 1
 
     if: "!contains(github.event.head_commit.message, '[ci skip]')"
 
